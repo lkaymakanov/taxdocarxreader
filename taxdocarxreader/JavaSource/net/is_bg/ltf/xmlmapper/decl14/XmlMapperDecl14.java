@@ -19,8 +19,8 @@ public class XmlMapperDecl14 {
 	private String declIdentDocKind;       //DECL_IDENTDOC_KIND
 	private String declEmissionDate;       //DECL_EMISSION_DATE
 	private String declRdvr;                //DECL_RDVR 
-	private XmlMapperDecl14Address declPermAddress;  //DECL_PERM_ADDR
-	private XmlMapperDecl14Address declPostAddress;   //DECL_POST_ADDR
+	private XmlMapperDecl14AddressNew declPermAddress;  //DECL_PERM_ADDR
+	private XmlMapperDecl14AddressNew declPostAddress;   //DECL_POST_ADDR
 	private String kindDecl;    //KINDDECL
 	private String taxObjNo;   //TAXOBJNO
 	private String partidano;  // PARTIDANO 
@@ -34,7 +34,7 @@ public class XmlMapperDecl14 {
 	private String changeDate;  //CHANGE_DATE
 	private String empIdn;  //EMP_IDN
 	private String empName; //EMP_NAME
-	private XmlMapperDecl14Address empPostAddress;  //EMP_POST_ADDR
+	private XmlMapperDecl14AddressNew empPostAddress;  //EMP_POST_ADDR
 	private String empIdentDocKind;   //EMP_IDENTDOC_KIND
 	private String empIdentDoc;  //EMP_IDENTDOCNO
 	private String empNo;   //EMPNO
@@ -107,11 +107,11 @@ public class XmlMapperDecl14 {
 		return declRdvr;
 	}
 	@XmlElement(name="DECL_PERM_ADDR")
-	public XmlMapperDecl14Address getDeclPermAddress() {
+	public XmlMapperDecl14AddressNew getDeclPermAddress() {
 		return declPermAddress;
 	}
 	@XmlElement(name="DECL_POST_ADDR")
-	public XmlMapperDecl14Address getDeclPostAddress() {
+	public XmlMapperDecl14AddressNew getDeclPostAddress() {
 		return declPostAddress;
 	}
 	@XmlElement(name="KINDDECL")
@@ -167,7 +167,7 @@ public class XmlMapperDecl14 {
 		return empName;
 	}
 	@XmlElement(name="EMP_POST_ADDR")
-	public XmlMapperDecl14Address getEmpPostAddress() {
+	public XmlMapperDecl14AddressNew getEmpPostAddress() {
 		return empPostAddress;
 	}
 	@XmlElement(name="EMP_IDENTDOC_KIND")
@@ -333,10 +333,10 @@ public class XmlMapperDecl14 {
 	public void setDeclRdvr(String declRdvr) {
 		this.declRdvr = declRdvr;
 	}
-	public void setDeclPermAddress(XmlMapperDecl14Address declPermAddress) {
+	public void setDeclPermAddress(XmlMapperDecl14AddressNew declPermAddress) {
 		this.declPermAddress = declPermAddress;
 	}
-	public void setDeclPostAddress(XmlMapperDecl14Address declPostAddress) {
+	public void setDeclPostAddress(XmlMapperDecl14AddressNew declPostAddress) {
 		this.declPostAddress = declPostAddress;
 	}
 	public void setKindDecl(String kindDecl) {
@@ -378,7 +378,7 @@ public class XmlMapperDecl14 {
 	public void setEmpName(String empName) {
 		this.empName = empName;
 	}
-	public void setEmpPostAddress(XmlMapperDecl14Address empPostAddress) {
+	public void setEmpPostAddress(XmlMapperDecl14AddressNew empPostAddress) {
 		this.empPostAddress = empPostAddress;
 	}
 	public void setEmpIdentDocKind(String empIdentDocKind) {
