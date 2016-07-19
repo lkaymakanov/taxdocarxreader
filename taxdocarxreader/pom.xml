@@ -1,0 +1,187 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>taxdocarxreader</groupId>
+  <artifactId>taxdocarxreader</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>taxdocarxreader</name>
+  <description>Reads taxdoc XML!!!</description>
+  	<build>
+		<sourceDirectory>${basedir}/JavaSource</sourceDirectory>
+
+		<finalName>
+			${project.artifactId}-${project.version}-${buildNumber}
+		</finalName>
+
+		<defaultGoal>install</defaultGoal>
+
+		<resources>
+			<resource>
+				<filtering>true</filtering>
+				<directory>JavaResource</directory>
+				<excludes>
+					<exclude>**/.svn</exclude>
+					<exclude>**/*.jasper</exclude>
+					<exclude>**/*.TTF</exclude>
+					<exclude>**/*.ttf</exclude>
+					<exclude>**/*.gif</exclude>
+					<exclude>**/*.gif</exclude>
+					<exclude>**/*.exe</exclude>
+				</excludes>
+			</resource>
+			<resource>
+				<filtering>false</filtering>
+				<directory>JavaResource</directory>
+				<includes>
+					<include>**/*.jasper</include>
+					<include>**/*.TTF</include>
+					<include>**/*.ttf</include>
+					<include>**/*.gif</include>
+					<include>**/*.exe</include>
+				</includes>
+			</resource>
+		</resources>
+
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>2.4.3</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+		
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>buildnumber-maven-plugin</artifactId>
+				<version>1.0</version>
+				
+				<executions>
+					<execution>
+						<id>generate-buildnumber</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>	
+						<configuration>
+							<buildNumberPropertyName>buildNumber</buildNumberPropertyName>	
+						</configuration>		
+					</execution>
+					<execution>
+						<id>generate-timestamp-date</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+						<configuration>	
+							<format>{0,date,dd.MM.yyyy}</format>
+							<items>
+							  <item>timestamp</item>
+							</items>
+							<buildNumberPropertyName>buildDate</buildNumberPropertyName>	
+						</configuration>			
+					</execution>
+					<execution>
+						<id>generate-timestamp-time</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>create</goal>
+						</goals>
+						<configuration>	
+							<format>{0,date,HH:mm:ss}</format>
+							<items>
+							  <item>timestamp</item>
+							</items>
+							<buildNumberPropertyName>buildTime</buildNumberPropertyName>	
+						</configuration>			
+					</execution>
+				</executions>
+				
+				<configuration>
+					<doCheck>false</doCheck>
+					<doUpdate>true</doUpdate>
+					
+					<urlScm>scm:svn:https://10.240.44.142/svn/mdtre/java/LTF/</urlScm>
+					<username>alb</username>
+					<password>alabala</password>
+					
+					<providerImplementations>
+						<svn>svn</svn>
+					</providerImplementations>
+				</configuration>			
+					
+					
+			</plugin>
+			
+			<plugin> 
+				<groupId>org.apache.maven.plugins</groupId> 
+				<artifactId>maven-war-plugin</artifactId> 
+				<version>2.0.2</version> 
+				<configuration> 
+					<warSourceDirectory>WebContent</warSourceDirectory> 
+					<archive> 
+						<manifest> 
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries> 
+						</manifest> 
+						<manifestEntries> 
+							<Implementation-Build>${buildDate}</Implementation-Build> 
+						</manifestEntries> 
+					</archive> 
+				</configuration> 
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>JBOSS</id>
+			<name>JBoss Repository</name>
+			<url> http://repository.jboss.org/nexus/content/groups/public-jboss/</url>
+		</repository>
+		
+		<repository>
+			<id>PUBLIC</id>
+			<name>Public Repository</name>
+			<url> http://repository.jboss.org/nexus/content/groups/public/</url>
+		</repository>
+		
+		<repository>
+			<id>STAGING</id>
+			<name>Staging Repository</name>
+			<url> http://repository.jboss.org/nexus/content/groups/staging/</url>
+		</repository>
+		
+		<repository>
+			<id>JASPER</id>
+			<name>JasperReports Repository</name>
+			<url>https://repository.jboss.org/nexus/content/groups/staging/</url>
+		</repository>
+		
+		<repository>
+           <id>ProjectRepo</id>
+           <name>ProjectRepo</name>
+           <url>file://${project.basedir}/WebContent/customlibs</url>
+        </repository>
+         <repository>
+		    <id>mdtteam-mvn-repo</id>
+		    <url>https://raw.githubusercontent.com/mdtteam/maven-repo/master/</url>
+		     <snapshots>
+		            <enabled>true</enabled>
+		            <updatePolicy>always</updatePolicy>
+		        </snapshots>
+		  </repository>
+	</repositories>
+</project>
