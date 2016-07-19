@@ -31,6 +31,8 @@ package net.is_bg.ltf.xmlmapper.decl14;
  *
  */
 public class XmlDecl14Property {
+	
+	
 
 	private String firmPropNo;
 	private String kindPorperty;
@@ -58,5 +60,7 @@ public class XmlDecl14Property {
 	private XmlMapperDecl14Address propertyAddress;
 	private XmlMapperDecl14TaxObject taxobject;
 	private XmlMapperDecl14FirmObjNode   firmobjNode;
+	
+	
 	
 }
