@@ -16,9 +16,9 @@ xmlattributes(pl.seqnots::integer as "PHN"),
 	 */
 	
 	private String ownerPartLandId; //OWNERPARTLAND_ID
-	private String divident; //DIVIDENT
-	private String divisor; //DIVISOR
-	private String part; //PART
+	private Integer divident; //DIVIDENT
+	private Integer divisor; //DIVISOR
+	private Integer part; //PART
 	private String ownerNo;//OWNERNO
 	
 	@XmlElement(name="OWNERPARTLAND_ID")
@@ -26,15 +26,15 @@ xmlattributes(pl.seqnots::integer as "PHN"),
 		return ownerPartLandId;
 	}
 	@XmlElement(name="DIVIDENT")
-	public String getDivident() {
+	public Integer getDivident() {
 		return divident;
 	}
 	@XmlElement(name="DIVISOR")
-	public String getDivisor() {
+	public Integer getDivisor() {
 		return divisor;
 	}
 	@XmlElement(name="PART")
-	public String getPart() {
+	public Integer getPart() {
 		return part;
 	}
 	@XmlElement(name="OWNERNO")
@@ -44,13 +44,13 @@ xmlattributes(pl.seqnots::integer as "PHN"),
 	public void setOwnerPartLandId(String ownerPartLandId) {
 		this.ownerPartLandId = ownerPartLandId;
 	}
-	public void setDivident(String divident) {
+	public void setDivident(Integer divident) {
 		this.divident = divident;
 	}
-	public void setDivisor(String divisor) {
+	public void setDivisor(Integer divisor) {
 		this.divisor = divisor;
 	}
-	public void setPart(String part) {
+	public void setPart(Integer part) {
 		this.part = part;
 	}
 	public void setOwnerNo(String ownerNo) {
