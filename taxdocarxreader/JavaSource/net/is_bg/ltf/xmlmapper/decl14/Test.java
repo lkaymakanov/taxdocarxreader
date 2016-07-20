@@ -112,7 +112,7 @@ class Test {
 		Object xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocData(108981l);
 		byte [] b = (byte []) xml;
 		String s = new String(b);
-		XmlMapperDecl14 decl14=XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
+		XmlMapperDecl14 decl14 = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
 		System.out.println(s);
 	}
 }
