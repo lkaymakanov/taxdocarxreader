@@ -56,7 +56,7 @@ public class XmlDecl14Property {
 	private String specifyotherUsage; //SPECIFYOTHERUSAGE
 	private String propertyIdentifier; //PROPERTYIDENTIFIER
 	private String inCharge; //INCHARGE
-	private XmlMapperDecl14Building building; //EDIFICE
+	private XmlMapperDecl14EdiFice edifice; //EDIFICE
 	private XmlMapperDecl14Land land; //LAND
 	private XmlMapperDecl14PartProperty partProperty;  //PARTPROPERTY
 	
@@ -265,8 +265,8 @@ public class XmlDecl14Property {
 		return inCharge;
 	}
 	@XmlElement(name="EDIFICE")
-	public XmlMapperDecl14Building getBuilding() {
-		return building;
+	public XmlMapperDecl14EdiFice getEdifice() {
+		return edifice;
 	}
 	@XmlElement(name="LAND")
 	public XmlMapperDecl14Land getLand() {
@@ -429,8 +429,8 @@ public class XmlDecl14Property {
 	public void setInCharge(String inCharge) {
 		this.inCharge = inCharge;
 	}
-	public void setBuilding(XmlMapperDecl14Building building) {
-		this.building = building;
+	public void setEdifice(XmlMapperDecl14EdiFice edifice) {
+		this.edifice = edifice;
 	}
 	public void setLand(XmlMapperDecl14Land land) {
 		this.land = land;

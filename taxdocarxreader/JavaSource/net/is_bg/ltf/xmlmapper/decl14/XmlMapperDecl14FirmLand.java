@@ -2,23 +2,22 @@ package net.is_bg.ltf.xmlmapper.decl14;
 
 import javax.xml.bind.annotation.XmlElement;
 
-public class XmlMapperDecl14FirmHome {
-/***
- *    select xmlforest(
-           o.kindobj as "KINDOBJ",
-           o.seqnoobject as "SEQNOOBJECT", 
+public class XmlMapperDecl14FirmLand {
+/**
+ *   o.kindobj as "KINDOBJ",
+           o.seqnoobject as "SEQNOOBJECT",
            o.typeprop as "TYPEPROP",
            (select d.value
             from decode d
             where d.columnname = 'KindOwner'
-            and d.code::integer = o.kindowner::integer) as "KINDOWNER", 
-           o.function as "FUNCTION", 
-           freereason(o.taxfreereason) as "TAXFREEREASON", 
-           numbertrim(o.accvalue) as "ACCVALUE" 
+            and d.code::integer = o.kindowner::integer) as "KINDOWNER",
+           o.function as "FUNCTION",
+           freereason(o.taxfreereason) as "TAXFREEREASON",
+           numbertrim(o.accvalue) as "ACCVALUE"
  */
 	
 	private String kindObj; //KINDOBJ
-	private String seqNoObject; //SEQNOOBJECT
+	private String seqNoObj; //SEQNOOBJECT
 	private String typeProp; //TYPEPROP
 	private String kindOwner; //KINDOWNER
 	private String function; //FUNCTION
@@ -30,8 +29,8 @@ public class XmlMapperDecl14FirmHome {
 		return kindObj;
 	}
 	@XmlElement(name="SEQNOOBJECT")
-	public String getSeqNoObject() {
-		return seqNoObject;
+	public String getSeqNoObj() {
+		return seqNoObj;
 	}
 	@XmlElement(name="TYPEPROP")
 	public String getTypeProp() {
@@ -56,8 +55,8 @@ public class XmlMapperDecl14FirmHome {
 	public void setKindObj(String kindObj) {
 		this.kindObj = kindObj;
 	}
-	public void setSeqNoObject(String seqNoObject) {
-		this.seqNoObject = seqNoObject;
+	public void setSeqNoObj(String seqNoObj) {
+		this.seqNoObj = seqNoObj;
 	}
 	public void setTypeProp(String typeProp) {
 		this.typeProp = typeProp;
@@ -74,5 +73,4 @@ public class XmlMapperDecl14FirmHome {
 	public void setAccValue(String accValue) {
 		this.accValue = accValue;
 	}
-	
 }

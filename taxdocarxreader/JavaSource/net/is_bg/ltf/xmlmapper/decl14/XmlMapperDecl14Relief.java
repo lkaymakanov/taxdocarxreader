@@ -60,4 +60,37 @@ public class XmlMapperDecl14Relief {
 	public String getNote() {
 		return note;
 	}
+	public void setSubjectName(String subjectName) {
+		this.subjectName = subjectName;
+	}
+	public void setSubjectIdn(String subjectIdn) {
+		this.subjectIdn = subjectIdn;
+	}
+	public void setIsRetired(String isRetired) {
+		this.isRetired = isRetired;
+	}
+	public void setRetiredBeginDate(String retiredBeginDate) {
+		this.retiredBeginDate = retiredBeginDate;
+	}
+	public void setRetiredEndDate(String retiredEndDate) {
+		this.retiredEndDate = retiredEndDate;
+	}
+	public void setTelkDecisionDate(String telkDecisionDate) {
+		this.telkDecisionDate = telkDecisionDate;
+	}
+	public void setTelkDecisionNo(String telkDecisionNo) {
+		this.telkDecisionNo = telkDecisionNo;
+	}
+	public void setTelkBeginDate(String telkBeginDate) {
+		this.telkBeginDate = telkBeginDate;
+	}
+	public void setTelkEndDate(String telkEndDate) {
+		this.telkEndDate = telkEndDate;
+	}
+	public void setPermRelief(String permRelief) {
+		this.permRelief = permRelief;
+	}
+	public void setNote(String note) {
+		this.note = note;
+	}
 }
