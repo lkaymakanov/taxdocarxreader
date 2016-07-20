@@ -3,7 +3,7 @@ package net.is_bg.ltf.xmlmapper.decl14;
 import javax.xml.bind.annotation.XmlElement;
 
 /***/
-public class XmlDecl14Property {
+public class XmlMapperDecl14Property {
 	
 	private String locationMunicipality;   //LOCATION_MUNICIPALITY
 	private String seqNoProperty;//SEQNOPROPERTY

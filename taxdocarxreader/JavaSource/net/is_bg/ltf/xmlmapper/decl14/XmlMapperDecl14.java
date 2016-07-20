@@ -68,7 +68,7 @@ public class XmlMapperDecl14 {
 	private String receiverUserId;       //RECEIVER_USER_ID
 	private String receiverUserName;     //RECEIVER_USER_NAME
  	private String repName;              //REPRNAME
-	private XmlDecl14Property property;   //PROPERTY
+	private XmlMapperDecl14Property property;   //PROPERTY
 	
 	@XmlElement(name="MUNICIPALITY")
 	public String getMunicipality() {
@@ -303,7 +303,7 @@ public class XmlMapperDecl14 {
 		return repName;
 	}
 	@XmlElement(name="PROPERTY")
-	public XmlDecl14Property getProperty() {
+	public XmlMapperDecl14Property getProperty() {
 		return property;
 	}
 	public void setMunicipality(String municipality) {
@@ -480,7 +480,7 @@ public class XmlMapperDecl14 {
 	public void setRepName(String repName) {
 		this.repName = repName;
 	}
-	public void setProperty(XmlDecl14Property property) {
+	public void setProperty(XmlMapperDecl14Property property) {
 		this.property = property;
 	}
 	
