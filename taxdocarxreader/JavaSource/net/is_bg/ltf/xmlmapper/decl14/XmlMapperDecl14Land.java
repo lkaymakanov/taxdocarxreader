@@ -69,7 +69,7 @@ note as "NOTE", numbertrim(errordata) as "ERRORDATA", used_from as "USED_FROM"
 	private String note; //NOTE
 	private String errorData;  //ERRORDATA
 	private String usedFrom; //USED_FROM
-	private XmlMapperDecl14PartLand lParts;  //LPARTS
+	private XmlMapperDecl14PartLands lParts;  //LPARTS
 	private XmlMapperDecl14FirmLand lFirm ; //LFIRM
 	
 	@XmlElement(name="TYPEDECLAR")
@@ -213,7 +213,7 @@ note as "NOTE", numbertrim(errordata) as "ERRORDATA", used_from as "USED_FROM"
 		return usedFrom;
 	}
 	@XmlElement(name="LPARTS")
-	public XmlMapperDecl14PartLand getlParts() {
+	public XmlMapperDecl14PartLands getlParts() {
 		return lParts;
 	}
 	@XmlElement(name="LFIRM")
@@ -325,7 +325,7 @@ note as "NOTE", numbertrim(errordata) as "ERRORDATA", used_from as "USED_FROM"
 	public void setUsedFrom(String usedFrom) {
 		this.usedFrom = usedFrom;
 	}
-	public void setlParts(XmlMapperDecl14PartLand lParts) {
+	public void setlParts(XmlMapperDecl14PartLands lParts) {
 		this.lParts = lParts;
 	}
 	public void setlFirm(XmlMapperDecl14FirmLand lFirm) {

@@ -20,7 +20,6 @@ xmlstructure.xmlpartlandusers(ob.part_land_id) as "PARTLANDUSERS"
 ))
 	 */
 	
-	private String landPart; //LANDPART
 	private String seqNots; //SEQNOTS
 	private XmlMapperTaxSubject taxSubject;//TAXSUBJECT
 	private String typeDeclar; //TYPEDECLAR
@@ -32,10 +31,7 @@ xmlstructure.xmlpartlandusers(ob.part_land_id) as "PARTLANDUSERS"
 	private String area; //AREA
 	private XmlMapperDecl14PartLandUsers  partLandUsers; //PARTLANDUSERS
 	
-	@XmlElement(name="LANDPART")
-	public String getLandPart() {
-		return landPart;
-	}
+	
 	@XmlElement(name="SEQNOTS")
 	public String getSeqNots() {
 		return seqNots;
@@ -75,9 +71,6 @@ xmlstructure.xmlpartlandusers(ob.part_land_id) as "PARTLANDUSERS"
 	@XmlElement(name="PARTLANDUSERS")
 	public XmlMapperDecl14PartLandUsers getPartLandUsers() {
 		return partLandUsers;
-	}
-	public void setLandPart(String landPart) {
-		this.landPart = landPart;
 	}
 	public void setSeqNots(String seqNots) {
 		this.seqNots = seqNots;
