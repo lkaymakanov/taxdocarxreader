@@ -9,7 +9,7 @@ public class XmlMapperDecl14HParts {
 
 	private List<XmlMapperDecl14HomePart> homeparts;  //HOME_PART
 
-	@XmlElement(name="HOME_PART")
+	@XmlElement(name="HOMEPART")
 	public List<XmlMapperDecl14HomePart> getHomeparts() {
 		return homeparts;
 	}

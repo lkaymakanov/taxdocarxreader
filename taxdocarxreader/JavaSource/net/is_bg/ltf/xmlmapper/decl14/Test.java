@@ -71,7 +71,7 @@ class Test {
 			new ConnectionProperties(PGR_DRIVER_DIGEST, URL_LOCAL, "pdv1", "pdv1", "pdv10.240.110.7") , //9   postgre  localhost
 			
 			new ConnectionProperties(PGR_DRIVER, URL_SOFIA_MERGE3, "sofiamerge3", "12345", "sofiamerge3"),  //10
-			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://10.240.110.70:5432/pdv", "pdv", "pdv", "")  //11
+			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://192.168.50.33:5432/pdv_test", "pdv", "pdv", "")  //11
 	};
 	
 	public static class CF extends  DataSourceConnectionFactoryDrManager implements IConnectionFactoryX {
@@ -109,7 +109,7 @@ class Test {
 	public static void main(String [] args) throws ClassNotFoundException, JAXBException{
 		init(dBases[11]);
 		
-		Object xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocData(108981l);
+		Object xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocData(1189537l);
 		byte [] b = (byte []) xml;
 		String s = new String(b);
 		XmlMapperDecl14 decl14 = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
