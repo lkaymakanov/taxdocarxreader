@@ -9,7 +9,7 @@ import net.is_bg.ltf.db.common.SelectSqlStatement;
 class SelectDocData extends SelectSqlStatement{
 	
 	private long taxdocId =-1;
-	private Object xml;
+	private byte [] xml;
 	
 	SelectDocData(long taxdocId ){
 		this.taxdocId = taxdocId;
@@ -17,7 +17,6 @@ class SelectDocData extends SelectSqlStatement{
 
 	@Override
 	protected String getSqlString() {
-		// TODO Auto-generated method stub
 		return " select docdata from taxdocarx where taxdoc_id = ?  ";
 	}
 	
@@ -37,7 +36,7 @@ class SelectDocData extends SelectSqlStatement{
 		}
 	}
 
-	public Object getXml() {
+	public byte [] getXml() {
 		return xml;
 	}
 	

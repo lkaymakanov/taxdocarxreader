@@ -108,11 +108,8 @@ class Test {
 
 	public static void main(String [] args) throws ClassNotFoundException, JAXBException{
 		init(dBases[11]);
-		
-		Object xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocData(1189537l);
-		byte [] b = (byte []) xml;
-		String s = new String(b);
-		XmlMapperDecl14 decl14 = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
-		System.out.println(s);
+		String xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(1189537l);
+		XmlMapperDecl14 decl14 = XmlSerialize.xmlToObject(xml, XmlMapperDecl14.class);
+		System.out.println(xml);
 	}
 }

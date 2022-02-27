@@ -12,13 +12,20 @@ class Dao extends AbstractMainDao {
 
 	public Dao(IConnectionFactory connectionFactory) {
 		super(connectionFactory);
-		// TODO Auto-generated constructor stub
 	}
 	
-	public Object getXmlDocData(long taxdocId){
+	public byte[] getXmlDocData(long taxdocId){
 		SelectDocData sel = new SelectDocData(taxdocId);
 		execute(sel);
 		return sel.getXml();
 	}
+	
+	
+	public String getXmlDocDataStr(long taxdocId){
+		SelectDocData sel = new SelectDocData(taxdocId);
+		execute(sel);
+		return new String(sel.getXml());
+	}
+	
 
 }
