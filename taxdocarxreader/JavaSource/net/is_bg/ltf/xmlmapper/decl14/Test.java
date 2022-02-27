@@ -1,6 +1,7 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
 import java.sql.Connection;
+import java.util.List;
 
 import javax.xml.bind.JAXBException;
 
@@ -15,7 +16,6 @@ import net.is_bg.ltf.db.common.interfaces.timer.IElaplsedTimer;
 import net.is_bg.ltf.db.common.interfaces.timer.IElaplsedTimerFactory;
 import net.is_bg.ltf.db.common.interfaces.visit.IVisit;
 import net.is_bg.ltf.db.common.interfaces.visit.IVisitFactory;
-import net.is_bg.ltf.xmlmapper.decl14.XmlMapperDecl14;
 
 class Test {
 	
@@ -108,8 +108,11 @@ class Test {
 
 	public static void main(String [] args) throws ClassNotFoundException, JAXBException{
 		init(dBases[11]);
-		String xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(1189537l);
-		XmlMapperDecl14 decl14 = XmlSerialize.xmlToObject(xml, XmlMapperDecl14.class);
-		System.out.println(xml);
+		List<String> xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(1189643);
+		XmlMapperDecl14 decl14;
+		for(String s: xml) {
+			decl14 = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
+		}
+		//System.out.println(xml);
 	}
 }

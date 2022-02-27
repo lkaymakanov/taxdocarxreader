@@ -1,5 +1,8 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.is_bg.ltf.db.common.AbstractMainDao;
 import net.is_bg.ltf.db.common.interfaces.IConnectionFactory;
 
@@ -14,17 +17,21 @@ class Dao extends AbstractMainDao {
 		super(connectionFactory);
 	}
 	
-	public byte[] getXmlDocData(long taxdocId){
+	public List<byte[]> getXmlDocData(long taxdocId){
 		SelectDocData sel = new SelectDocData(taxdocId);
 		execute(sel);
 		return sel.getXml();
 	}
 	
 	
-	public String getXmlDocDataStr(long taxdocId){
+	public List<String> getXmlDocDataStr(long taxdocId){
 		SelectDocData sel = new SelectDocData(taxdocId);
 		execute(sel);
-		return new String(sel.getXml());
+		List<String> s = new ArrayList<String>(); 
+		for(byte [] b :sel.getXml()) {
+			s.add(new String(b));
+		}
+		return s;
 	}
 	
 

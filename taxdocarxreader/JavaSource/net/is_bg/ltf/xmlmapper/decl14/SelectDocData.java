@@ -3,13 +3,15 @@ package net.is_bg.ltf.xmlmapper.decl14;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.is_bg.ltf.db.common.SelectSqlStatement;
 
 class SelectDocData extends SelectSqlStatement{
 	
 	private long taxdocId =-1;
-	private byte [] xml;
+	private List<byte[]> xml = new ArrayList<byte[]>();
 	
 	SelectDocData(long taxdocId ){
 		this.taxdocId = taxdocId;
@@ -17,7 +19,7 @@ class SelectDocData extends SelectSqlStatement{
 
 	@Override
 	protected String getSqlString() {
-		return " select docdata from taxdocarx where taxdoc_id = ?  ";
+		return " select docdata from taxdocarx where taxdoc_id = ? order by taxdocarx_id ";
 	}
 	
 	@Override
@@ -32,11 +34,11 @@ class SelectDocData extends SelectSqlStatement{
 	protected void retrieveResult(ResultSet rs) throws SQLException {
 		// TODO Auto-generated method stub
 		while(rs.next()){
-			xml = rs.getBytes(1);
+			xml.add( rs.getBytes(1));
 		}
 	}
 
-	public byte [] getXml() {
+	public List<byte[]> getXml() {
 		return xml;
 	}
 	
