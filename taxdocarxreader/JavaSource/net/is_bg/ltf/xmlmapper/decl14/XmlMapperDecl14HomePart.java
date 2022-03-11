@@ -110,5 +110,7 @@ xmlstructure.xmlparthomeusers(ob.parthomeobj_id) as "PARTHOMEUSERS"
 	public void setPartHomeUsers(XmlMapperDecl14PartHomeUser partHomeUsers) {
 		this.partHomeUsers = partHomeUsers;
 	}
-	
+	public String getIdn() {
+		return this.subject==null ? null : subject.getIdn();
+	}
 }

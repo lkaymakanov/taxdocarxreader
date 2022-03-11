@@ -1,6 +1,7 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
 import java.sql.Connection;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -71,7 +72,8 @@ class Test {
 			new ConnectionProperties(PGR_DRIVER_DIGEST, URL_LOCAL, "pdv1", "pdv1", "pdv10.240.110.7") , //9   postgre  localhost
 			
 			new ConnectionProperties(PGR_DRIVER, URL_SOFIA_MERGE3, "sofiamerge3", "12345", "sofiamerge3"),  //10
-			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://192.168.50.33:5432/pdv_test", "pdv", "pdv", "")  //11
+			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://192.168.50.33:5432/pdv_test", "pdv", "pdv", ""),  //11
+			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://10.240.44.244:5433/burgas", "prod", "12345", "")  //12
 	};
 	
 	public static class CF extends  DataSourceConnectionFactoryDrManager implements IConnectionFactoryX {
@@ -81,7 +83,6 @@ class Test {
 
 		@Override
 		public Connection getConnection(String arg0) {
-			// TODO Auto-generated method stub
 			return getConnection();
 		}
 	}
@@ -93,26 +94,27 @@ class Test {
 	public static void init(ConnectionProperties pr){
 		 DBConfig.initDBConfig(new LogFactorySystemOut(), new IVisitFactory() {
 			public IVisit getVist() {
-				// TODO Auto-generated method stub
 				return new VisitEmpty();
 			}
 		}, new CF(pr), new IElaplsedTimerFactory() {
 			public IElaplsedTimer getElapsedTimer() {
-				// TODO Auto-generated method stub
 				return new ElapsedTimer();
 			}
-		});
+		}, null);
 		 
 		System.out.println("=========================== Data base connection initialized from cennection properties ============================= ");
 	 }
 
 	public static void main(String [] args) throws ClassNotFoundException, JAXBException{
-		init(dBases[11]);
-		List<String> xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(1189643);
-		XmlMapperDecl14 decl14;
+		init(dBases[12]);
+		List<String> xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(774685);
+		List<XmlMapperDecl14> decl14 = new ArrayList<XmlMapperDecl14>();
 		for(String s: xml) {
-			decl14 = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
+			XmlMapperDecl14 d = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
+			decl14.add(d);
+			System.out.println(HtmlOutPut.asHtmlTable(d));
+			XmlMapperDecl14Manager.manage(d);
 		}
-		//System.out.println(xml);
+		System.out.println("End....");
 	}
 }
