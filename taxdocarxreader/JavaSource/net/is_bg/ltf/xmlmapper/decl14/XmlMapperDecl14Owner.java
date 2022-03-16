@@ -84,4 +84,8 @@ xmlstructure.xmlrelief(pp.relief_id)  as "RELIEF"
 	public void setRelief(XmlMapperDecl14Relief relief) {
 		this.relief = relief;
 	}
+	
+	public int getSeqNo() {
+		return Integer.valueOf(getSeqNots());
+	}
 }

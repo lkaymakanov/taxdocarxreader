@@ -68,6 +68,7 @@ public class XmlMapperDecl14 {
 	private String receiverUserId;       //RECEIVER_USER_ID
 	private String receiverUserName;     //RECEIVER_USER_NAME
  	private String repName;              //REPRNAME
+ 	private String additionalNote;              //ADDITIONALNOTE
 	private XmlMapperDecl14Property property;   //PROPERTY
 	
 	@XmlElement(name="MUNICIPALITY")
@@ -78,6 +79,11 @@ public class XmlMapperDecl14 {
 	public XmlMapperDecl14TaxObject getObject() {
 		return object;
 	}
+	@XmlElement(name="ADDITIONALNOTE")
+	public String getAdditionalNote() {
+		return additionalNote;
+	}
+	
 	@XmlElement(name="DECL_IDN")
 	public String getDeclIdn() {
 		return declIdn;
@@ -483,6 +489,8 @@ public class XmlMapperDecl14 {
 	public void setProperty(XmlMapperDecl14Property property) {
 		this.property = property;
 	}
-	
+	public void setAdditionalNote(String additionalNote) {
+		this.additionalNote = additionalNote;
+	}
 	
 }

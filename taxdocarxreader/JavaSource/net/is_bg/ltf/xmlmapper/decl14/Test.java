@@ -1,5 +1,9 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
@@ -105,16 +109,54 @@ class Test {
 		System.out.println("=========================== Data base connection initialized from cennection properties ============================= ");
 	 }
 
-	public static void main(String [] args) throws ClassNotFoundException, JAXBException{
-		init(dBases[12]);
-		List<String> xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(774685);
+	
+	private static void saveToFile(long taxdocId) throws UnsupportedEncodingException, IOException, ClassNotFoundException, JAXBException {
+		//774685
+		//761270
+		List<String> xml = new Dao(DBConfig.getConnectionFactory()).getXmlDocDataStr(taxdocId);
 		List<XmlMapperDecl14> decl14 = new ArrayList<XmlMapperDecl14>();
-		for(String s: xml) {
+		
+		String ss = "";
+		
+		for(String s:xml) {
 			XmlMapperDecl14 d = XmlSerialize.xmlToObject(s, XmlMapperDecl14.class);
 			decl14.add(d);
-			System.out.println(HtmlOutPut.asHtmlTable(d));
-			XmlMapperDecl14Manager.manage(d);
 		}
+		//if(decl14.size() <=0) return;
+		
+		//compare histories one another.
+		ss = XmlMapperDecl14Manager.cmpHistories(decl14);
+		
+		String partidaNo = decl14.get(0).getPartidano();
+		System.out.println(partidaNo);
+		//System.out.println("partidano " + decl14.get(0).getPartidano());
+		
+		//System.out.println(ss);
+		FileOutputStream fos= new FileOutputStream(new File(partidaNo+".html"));
+		fos.write(ss.getBytes("UTF-8"));
+		fos.flush();
+		fos.close();
+	}
+	
+	
+	public static void main(String [] args) throws ClassNotFoundException, JAXBException, UnsupportedEncodingException, IOException{
+		init(dBases[12]);
+		
+		//761270
+		//761272
+		//760231
+		//774685
+		//756458
+		saveToFile(774685);
+		/*
+		saveToFile(761270);
+		saveToFile(761272);
+		saveToFile(760231);
+		saveToFile(756458);
+		*/
+		/***/
+		
+		
 		System.out.println("End....");
 	}
 }

@@ -24,15 +24,12 @@ class SelectDocData extends SelectSqlStatement{
 	
 	@Override
 	protected void setParameters(PreparedStatement prStmt) throws SQLException {
-		// TODO Auto-generated method stub
-		
 		bindVarData.setLong(taxdocId);
 		bindVarData.setParameters(prStmt);
 	}
 
 	@Override
 	protected void retrieveResult(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
 		while(rs.next()){
 			xml.add( rs.getBytes(1));
 		}
@@ -41,6 +38,5 @@ class SelectDocData extends SelectSqlStatement{
 	public List<byte[]> getXml() {
 		return xml;
 	}
-	
 	
 }

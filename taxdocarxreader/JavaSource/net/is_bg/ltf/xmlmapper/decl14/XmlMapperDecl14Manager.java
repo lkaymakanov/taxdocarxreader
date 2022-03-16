@@ -1,5 +1,8 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,9 +34,6 @@ class XmlMapperDecl14Manager {
 		return  ho.gethPart().getHomeparts();
 	}
 
-	
-	
-	
 	static int smallerSize(List b, List next) {
 		int size = b.size() < next.size() ? b.size():next.size();
 		return size;
@@ -41,8 +41,7 @@ class XmlMapperDecl14Manager {
 	
 	static int cmpSize(List b, List next) {
 		if(b.size() == next.size()) return 0;
-		if(b.size() < next.size()) return -1;
-		return 1;
+	    return (b.size() - next.size());// return -1;
 	}
 	
     private static void cmpBuildings(List<XmlMapperDecl14Building> b, List<XmlMapperDecl14Building> next) {
@@ -56,20 +55,88 @@ class XmlMapperDecl14Manager {
      	cmpHomeObjects(getHomeObjectsForBuilding(b), getHomeObjectsForBuilding(next));
 	}
 	
-	static void cmpHistories(List<XmlMapperDecl14> h) {
-		for(int i =0; i < h.size()-1; i++) {
-			cmpHistories(h.get(i), h.get(i+1));
+	
+	static String cmpHistories(List<XmlMapperDecl14> h) {
+		String res = "";
+		if(h.size()==0) return res;
+		res+=cmpHistories(null, h.get(0),  0);
+		int size = h.size()-1;
+		for(int i =0; i < size; i++) {
+			res+=cmpHistories(h.get(i), h.get(i+1),  i+1);
 		}
+		return res;
 	}
 	
-	static void cmpHistories(XmlMapperDecl14 h, XmlMapperDecl14 next) {
-		List<XmlMapperDecl14Owner>  owners =  getOwners(h);
-		List<XmlMapperDecl14Owner>  ownersNext =  getOwners(next);
+	
+	/**
+	 * Get delta between 2 histories
+	 * @param prev
+	 * @param thiss
+	 * @return
+	 */
+	private static XmlDelta getDelta(XmlMapperDecl14 prev, XmlMapperDecl14 thiss) {
+		List<XmlMapperDecl14Owner> newOwners, changeOwners;
+		XmlDelta delta = prev == null ? null :  new XmlDelta();
 		
-		//check if owners size changed......
-		if(owners.size() != ownersNext.size()) {
-	     	System.out.println("Owners changed from " + owners.size() + " to " + ownersNext.size());
+		if(prev!=null) {
+			List<XmlMapperDecl14Owner>  ownersPrev =  getOwners(prev);
+			List<XmlMapperDecl14Owner>  ownersThis =  getOwners(thiss);
+			newOwners = getNewOwners(ownersPrev, ownersThis);
+			changeOwners = getOnwersThatChanged(ownersPrev, ownersThis);
+			
+			
+			delta.newOwners = (newOwners ==null ? delta.newOwners : newOwners);
+			delta.changeOwners = (changeOwners == null? delta.changeOwners : changeOwners);
+			
+			delta.newOwners = delta.newOwners.stream().sorted(Comparator.comparing(XmlMapperDecl14Owner::getSeqNo)).collect(Collectors.toList());
+			delta.changeOwners = delta.changeOwners.stream().sorted(Comparator.comparing(XmlMapperDecl14Owner::getSeqNo)).collect(Collectors.toList());
+			
+			delta.wrongSubjectsSeqno = getWrongSeqNots(ownersThis);
+			delta.bDelta = getBuildingDelta(prev, thiss);
+			delta.bDelta.fill();
+			
 		}
+		return delta;
+	}
+	
+	
+	/***
+	 * Get delta between buildings of 2 histories!!
+	 * @param prev
+	 * @param thiss
+	 * @return
+	 */
+	private static XmlBuildingDelta getBuildingDelta(XmlMapperDecl14 prev, XmlMapperDecl14 thiss) {
+		XmlBuildingDelta delta = new XmlBuildingDelta();
+		if(prev == null) return delta;
+	    delta.prevbuild = 	getBuildings(prev);
+	    delta.thisbuild = getBuildings(thiss);
+	    return delta;
+	}
+	
+	/***Compare 2 histories and produce html out content!!!*/
+	static String cmpHistories(XmlMapperDecl14 prev, XmlMapperDecl14 thiss, int index) {
+		//get delta between this & prev decl
+		XmlDelta delta = getDelta(prev, thiss);
+		String res = HtmlOutPut.asHtmlTable(thiss, delta, index);
+		return res;
+	}
+	
+	
+	/***
+	 * Razminavane v porednite nomera na subektite.
+	 * @param owners
+	 * @return
+	 */
+	static Map<Integer, XmlMapperDecl14Owner> getWrongSeqNots(List<XmlMapperDecl14Owner> owners) {
+		//List<XmlMapperDecl14Owner> res = new ArrayList<>();
+		Map<Integer, XmlMapperDecl14Owner>  m = new HashMap<>();
+		int i = 1;
+		for(XmlMapperDecl14Owner o : owners) {
+			if(!o.getSeqNots().equals((i)+ "")) m.put(i, o);
+			i++;
+		}
+		return m;
 	}
 	
     static void cmpHomeObjects(List<XmlMapperDecl14HomeObject> ho,  List<XmlMapperDecl14HomeObject> next) {
@@ -112,7 +179,6 @@ class XmlMapperDecl14Manager {
 			if(!ho1p.containsKey(k)) {System.out.println("Subject with ein " + k  + "  was added to object " + getObjectDescription(next));}
 		}
 		
-		
 	}
 	
 	//group by owners and users
@@ -123,7 +189,7 @@ class XmlMapperDecl14Manager {
 	
 	//get owners
 	static List<XmlMapperDecl14Owner>  getOwners(XmlMapperDecl14 d){
-		return getOwnersUsersProperty(d).get("собственик");
+		return getOwnersUsersProperty(d).get("собственик");//.stream().sorted(Comparator.comparing(XmlMapperDecl14Owner::getSeqNots)).collect(Collectors.toList());
 	}
 	
 	//get owners or users
@@ -131,10 +197,62 @@ class XmlMapperDecl14Manager {
 		return getOwnersUsersProperty(d).get(key);
 	}
 	
-	//groupirane po 
+	
+	
+	//groupirane na chastite  po Ein na subektite
 	static Map<String, List<XmlMapperDecl14HomePart>> groupByPartsBySubjects(List<XmlMapperDecl14HomePart>  p){
 		return  p.stream().collect(Collectors.groupingBy(XmlMapperDecl14HomePart::getIdn));
 	}
+	
+	//grupirane po ein na sobstvenici polzvateeli
+	static Map<String, List<XmlMapperDecl14Owner>> getSubjectsEinSeqnoMap(List<XmlMapperDecl14Owner> owners){
+		return  owners.stream().collect(Collectors.groupingBy(XmlMapperDecl14Owner::getIdn));
+	}
+	
+	//compare owners
+	/*static List<XmlMapperDecl14Owner> cmpOwners(List<XmlMapperDecl14Owner> thiss, List<XmlMapperDecl14Owner> next) {
+		List<XmlMapperDecl14Owner> newOwners = new ArrayList<XmlMapperDecl14Owner>();
+		
+		return newOwners;
+	}*/
+	
+	
+	/***
+	 * Retreives the new added owners!!!
+	 * @param thiss
+	 * @param next
+	 * @return
+	 */
+	static List<XmlMapperDecl14Owner> getNewOwners(List<XmlMapperDecl14Owner> prev, List<XmlMapperDecl14Owner> thiss) {
+		List<XmlMapperDecl14Owner> newOwners = new ArrayList<XmlMapperDecl14Owner>();
+		Map<String, List<XmlMapperDecl14Owner>> prevMap = getSubjectsEinSeqnoMap(prev);
+		Map<String, List<XmlMapperDecl14Owner>> thisMap   = getSubjectsEinSeqnoMap(thiss);
+		
+		for(String k : thisMap.keySet()) {
+			if(!prevMap.containsKey(k)) newOwners.addAll(thisMap.get(k));
+		}
+		
+		return newOwners;
+	}
+	
+	
+	
+	/***
+	 * get owners that changed under the same number!!!
+	 */
+	static List<XmlMapperDecl14Owner> getOnwersThatChanged(List<XmlMapperDecl14Owner> prev, List<XmlMapperDecl14Owner> thiss){
+		List<XmlMapperDecl14Owner> changed = new ArrayList<XmlMapperDecl14Owner>();
+		int size = smallerSize(prev, thiss);
+		for(int i =0; i< size; i++) {
+			XmlMapperDecl14Owner p = prev.get(i);
+			XmlMapperDecl14Owner t = thiss.get(i);
+			if(!t.getIdn().equals(p.getIdn())) {
+				changed.add(t);
+			}
+		}
+		return changed;
+	}
+	
 	
 /*	static List<XmlMapperDecl14HomePart>> groupByPartsBySubjects(List<XmlMapperDecl14HomePart>  p){
 		return  p.stream().collect(Collectors.groupingBy(XmlMapperDecl14HomePart::getIdn));
@@ -143,9 +261,6 @@ class XmlMapperDecl14Manager {
 	static void cmpParts(XmlMapperDecl14HomePart p, XmlMapperDecl14HomePart next) {
 		
 	}
-	
-	
-	
 	
 	
 	
