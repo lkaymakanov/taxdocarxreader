@@ -1,5 +1,9 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -7,11 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+
 class XmlMapperDecl14Manager {
 	
-	
-	
-	
+	private final static String CSS = "css.css";
+
 	//get home objects in building
 	static List<XmlMapperDecl14HomeObject> getHomeObjectsForBuilding(XmlMapperDecl14Building b){
 		List<XmlMapperDecl14HomeObject> homeobj =  b.getHomes().getHomeObjects();
@@ -34,29 +38,47 @@ class XmlMapperDecl14Manager {
 		return  ho.gethPart().getHomeparts();
 	}
 
-	static int smallerSize(List b, List next) {
+	static int smallerSize(List<?> b, List<?> next) {
 		int size = b.size() < next.size() ? b.size():next.size();
 		return size;
 	}
 	
-	static int cmpSize(List b, List next) {
+	static int cmpSize(List<?> b, List<?> next) {
 		if(b.size() == next.size()) return 0;
 	    return (b.size() - next.size());// return -1;
 	}
 	
-    private static void cmpBuildings(List<XmlMapperDecl14Building> b, List<XmlMapperDecl14Building> next) {
-		int size = smallerSize(b, next);
-    	for(int i=0; i<size;i++) {
-    		cmpBuildings(b.get(i), next.get(i));
-    	}
+	
+	
+	private static String getResourceAsString(String resourcename) throws IOException {
+		InputStream is = XmlMapperTaxSubject.class.getClassLoader().getResourceAsStream(resourcename/*"/words.txt"*/);
+		BufferedReader br = new BufferedReader(new InputStreamReader(is));
+		String s = br.readLine();
+		String res="";
+		while(s!=null) {
+			res=res + s+"\n";
+			s = br.readLine();
+		}
+		return res;
 	}
 	
-	private static void cmpBuildings(XmlMapperDecl14Building b, XmlMapperDecl14Building next) {
-     	cmpHomeObjects(getHomeObjectsForBuilding(b), getHomeObjectsForBuilding(next));
-	}
+	/***
+	 * Add html tags, head, body & css styles!!!!!
+	 * @param ss
+	 * @return
+	 * @throws IOException 
+	 */
+    private static  String wrapHtmlTables(String ss) throws IOException {
+    	return  "<html><head><style>" +  getResourceAsString(CSS) + "</style></head><body>" + ss + "</body></hmtl>";
+    }
 	
-	
-	static String cmpHistories(List<XmlMapperDecl14> h) {
+	/***
+	 * Compare histories!!!!!!!!!!!
+	 * @param h
+	 * @return
+	 * @throws IOException 
+	 */
+	static String cmpHistories(List<XmlMapperDecl14> h) throws IOException {
 		String res = "";
 		if(h.size()==0) return res;
 		res+=cmpHistories(null, h.get(0),  0);
@@ -64,7 +86,7 @@ class XmlMapperDecl14Manager {
 		for(int i =0; i < size; i++) {
 			res+=cmpHistories(h.get(i), h.get(i+1),  i+1);
 		}
-		return res;
+		return wrapHtmlTables(res);
 	}
 	
 	
@@ -83,7 +105,6 @@ class XmlMapperDecl14Manager {
 			List<XmlMapperDecl14Owner>  ownersThis =  getOwners(thiss);
 			newOwners = getNewOwners(ownersPrev, ownersThis);
 			changeOwners = getOnwersThatChanged(ownersPrev, ownersThis);
-			
 			
 			delta.newOwners = (newOwners ==null ? delta.newOwners : newOwners);
 			delta.changeOwners = (changeOwners == null? delta.changeOwners : changeOwners);
@@ -109,7 +130,7 @@ class XmlMapperDecl14Manager {
 	private static XmlBuildingDelta getBuildingDelta(XmlMapperDecl14 prev, XmlMapperDecl14 thiss) {
 		XmlBuildingDelta delta = new XmlBuildingDelta();
 		if(prev == null) return delta;
-	    delta.prevbuild = 	getBuildings(prev);
+	    delta.prevbuild = getBuildings(prev);
 	    delta.thisbuild = getBuildings(thiss);
 	    return delta;
 	}
@@ -124,7 +145,7 @@ class XmlMapperDecl14Manager {
 	
 	
 	/***
-	 * Razminavane v porednite nomera na subektite.
+	 * Razminavane v porednite nomera na subektite!!!!
 	 * @param owners
 	 * @return
 	 */
@@ -189,7 +210,8 @@ class XmlMapperDecl14Manager {
 	
 	//get owners
 	static List<XmlMapperDecl14Owner>  getOwners(XmlMapperDecl14 d){
-		return getOwnersUsersProperty(d).get("собственик");//.stream().sorted(Comparator.comparing(XmlMapperDecl14Owner::getSeqNots)).collect(Collectors.toList());
+		List<XmlMapperDecl14Owner> l =  getOwnersUsersProperty(d).get("собственик");//.stream().sorted(Comparator.comparing(XmlMapperDecl14Owner::getSeqNots)).collect(Collectors.toList());
+		return l!=null ? l: new ArrayList<>();
 	}
 	
 	//get owners or users
@@ -209,16 +231,10 @@ class XmlMapperDecl14Manager {
 		return  owners.stream().collect(Collectors.groupingBy(XmlMapperDecl14Owner::getIdn));
 	}
 	
-	//compare owners
-	/*static List<XmlMapperDecl14Owner> cmpOwners(List<XmlMapperDecl14Owner> thiss, List<XmlMapperDecl14Owner> next) {
-		List<XmlMapperDecl14Owner> newOwners = new ArrayList<XmlMapperDecl14Owner>();
-		
-		return newOwners;
-	}*/
 	
 	
 	/***
-	 * Retreives the new added owners!!!
+	 * Retreives the new added owners in this  history compared to previous one!!!
 	 * @param thiss
 	 * @param next
 	 * @return
@@ -254,18 +270,38 @@ class XmlMapperDecl14Manager {
 	}
 	
 	
+	//compare owners
+		/*static List<XmlMapperDecl14Owner> cmpOwners(List<XmlMapperDecl14Owner> thiss, List<XmlMapperDecl14Owner> next) {
+			List<XmlMapperDecl14Owner> newOwners = new ArrayList<XmlMapperDecl14Owner>();
+			
+			return newOwners;
+		}*/
+		
+	
+	
 /*	static List<XmlMapperDecl14HomePart>> groupByPartsBySubjects(List<XmlMapperDecl14HomePart>  p){
 		return  p.stream().collect(Collectors.groupingBy(XmlMapperDecl14HomePart::getIdn));
 	}*/
 	
+	/*
 	static void cmpParts(XmlMapperDecl14HomePart p, XmlMapperDecl14HomePart next) {
 		
+	}*/
+	
+	/*private static void cmpBuildings(List<XmlMapperDecl14Building> b, List<XmlMapperDecl14Building> next) {
+	int size = smallerSize(b, next);
+	for(int i=0; i<size;i++) {
+		cmpBuildings(b.get(i), next.get(i));
 	}
+	}
+
+	private static void cmpBuildings(XmlMapperDecl14Building b, XmlMapperDecl14Building next) {
+	 	cmpHomeObjects(getHomeObjectsForBuilding(b), getHomeObjectsForBuilding(next));
+	}*/
 	
-	
-	
+	/*
 	static void manage(XmlMapperDecl14 d14) {
-		String docDate = d14.getDocDate();
+		//String docDate = d14.getDocDate();
 		XmlMapperDecl14Property property =   d14.getProperty();
 		XmlMapperDecl14EdiFice edifice =  property.getEdifice();
 		XmlMapperDecl14PartProperty partProperty =  property.getPartProperty();
@@ -289,6 +325,6 @@ class XmlMapperDecl14Manager {
 	    		 }
 	    	}
 	    }
-	}
+	}*/
 	
 }

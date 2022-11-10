@@ -1,11 +1,11 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
-import javax.xml.crypto.dsig.spec.HMACParameterSpec;
 
 import net.is_bg.ltf.xmlmapper.decl14.HtmlOutPut.HtmlElementProp.HtmlElementPropBuilder;
 import net.is_bg.ltf.xmlmapper.decl14.XmlBuildingDelta.XmlBuildingHomeObjectChanges;
@@ -96,22 +96,7 @@ class HtmlOutPut {
 	}
 	
 	
-	private static String asDiv(HtmlElementPropBuilder p, Object o) {
-		if(o == null) o = "";
-		StringBuilder res = new StringBuilder();
-	    if(p!=null) res.append(HTML_KEYWORDS.DIV.begin(p.build()));
-	    else res.append(HTML_KEYWORDS.DIV.begin());
-		res.append(o.toString());
-		res.append(HTML_KEYWORDS.DIV.end());
-		return res.toString();
-	}
-	
-	
-	private static String asDiv(Object o) {
-		return asDiv(null, o);
-	}
-	
-	
+
 	
 	//greater than zero divider / divident 
 	private static String getPartToShow(XmlMapperDecl14HomePart p) {
@@ -177,7 +162,9 @@ class HtmlOutPut {
 	
 	
 	private static String asHtmlTable( List<XmlMapperDecl14HomeObject> homeobj, XmlMapperDecl14 d14) {
-		return asHtmlTable(null,homeobj, d14);
+		HtmlElementPropBuilder bd = new HtmlElementPropBuilder();
+		//bd.setStyle("border-style:solid;");
+		return asHtmlTable(bd, homeobj, d14);
 	}
 	
 	
@@ -196,13 +183,32 @@ class HtmlOutPut {
 		   		 
 		   		 //parts 
 		   		 List<XmlMapperDecl14HomePart> homeParts =  ho.gethPart().getHomeparts();
+		   		
+		   		 //show home objects parts in html
+		   		 for(XmlMapperDecl14HomePart p: homeParts) {
+		   			res.append(HTML_KEYWORDS.TR.begin());
+		   			 
+		   			XmlMapperTaxSubject ts =  p.getSubject();
+					//res.append(asCell(ownersByIdn.get(ts.getIdn()).get(0).getSeqNots()));
+					res.append(asCell(ts.getIdn()));
+					res.append(asCell(ts.getSubjectName()));
+					res.append(asCell(getPartToShow(p)));
+			   		//res.append(asCell(getPartToShow(p)));  ??
+			   		res.append(HTML_KEYWORDS.TR.end()); 
+		   		 }
+		   		 //res.append(HTML_KEYWORDS.TR.begin());
+		   		 //res.append("<td>homeobject owners parts</td>");
+		   		 //res.append(HTML_KEYWORDS.TR.end()); 
 		   		 
-		   		 res.append(HTML_KEYWORDS.TR.begin());
-		   		 res.append(asHtmlTable(homeParts, XmlMapperDecl14Manager.getSubjectsEinSeqnoMap(XmlMapperDecl14Manager.getOwners(d14)))); //as html
+		   		 /*res.append(HTML_KEYWORDS.TR.begin());
+		   		 res.append("<td>homeobject owners parts</td>" //here goes homeobject owners parts
+		   				 
+		   				 //asHtmlTable(homeParts, XmlMapperDecl14Manager.getSubjectsEinSeqnoMap(XmlMapperDecl14Manager.getOwners(d14)))
+		   				 ); //as html
 		   		 res.append(HTML_KEYWORDS.TR.end());
-		   		 
-		   		 res.append("-------------------------");
-		   		 res.append("<br />");
+		   		 */
+		   		 //res.append("-------------------------");
+		   		 //res.append("<br />");
 		   		 //for(XmlMapperDecl14HomePart part :  homeParts) {
 		   			  //List<XmlMapperDecl14OwnerHomePart> ownerHomeParst =  part.getPartHomeUsers().getOwnerHomePart();
 		   		 //}
@@ -212,8 +218,12 @@ class HtmlOutPut {
 		return res.toString();
 	}
 	
+	
+	
+	
+	
 	/***
-	 * Changed homeObjects to HtmlTable
+	 * Changed homeObjects to HtmlTable !!!!
 	 * @param bDelta
 	 * @param d14
 	 * @return
@@ -226,6 +236,7 @@ class HtmlOutPut {
 		HtmlElementPropBuilder displayInline = new HtmlElementPropBuilder();
 		displayInline.setStyle("float:left; padding-right:150px;");
 		if(bDelta.size() > 0) {
+			    //for each building get building data....
 		    	for(Integer k : sortSet(bDelta.keySet())) {
 		    		res.append(HTML_KEYWORDS.H3.begin());
 					res.append("Changed HomeObjects in building N:" + (k+1));
@@ -234,12 +245,16 @@ class HtmlOutPut {
 					List<XmlMapperDecl14HomeObject>  homeobjOrg = bDelta.get(k).orgParts; //original home objects 
 					List<XmlMapperDecl14HomeObject>  homeobj = bDelta.get(k).changedParts; //modified Objects
 					
-					//print home objects & parts
-					String orgTbl = asHtmlTable(homeobjOrg, d14);
-					String modTbl =  asHtmlTable(homeobj, d14) ;
+					//print parts as html table
+					res.append(asHtmlTableHomeObjChanges(homeobjOrg, homeobj, d14));
 					
-					res.append(asDiv(displayInline, orgTbl));
-					res.append(asDiv(modTbl));
+					//print home objects & parts
+					//String orgTbl = asHtmlTable(homeobjOrg, d14);
+					//String modTbl =  asHtmlTable(homeobj, d14) ;
+					
+					//res.append(asDiv(displayInline, orgTbl));
+					//res.append(asDiv(modTbl));
+					
 		    	}
 		}
 		String r = res.toString();
@@ -247,8 +262,100 @@ class HtmlOutPut {
 		return r;
 	}
 	
+	/***
+	 * Create HTML table of changed home objects next to each other!!!!!
+	 * @param prev
+	 * @param next
+	 * @param d14
+	 * @return
+	 */
+	private static String asHtmlTableHomeObjChanges(List<XmlMapperDecl14HomeObject> prev, List<XmlMapperDecl14HomeObject> next, XmlMapperDecl14 d14) {
+		StringBuilder res = new StringBuilder();
+		
+		long l = prev.size() > next.size() ? prev.size():next.size();
+		HtmlElementPropBuilder bd = new HtmlElementPropBuilder();
+		
+		//create html table 
+		res.append(HTML_KEYWORDS.TABLE.begin(bd.build()));
+		
+		//create table rows for each taxsubject part!!!!!!!!!!!
+		for(int i =0; i <l; i ++) {
+			// get previous & next home object or null if no more previous or next objects.....
+			XmlMapperDecl14HomeObject p = i < prev.size() ? prev.get(i) : null;
+			XmlMapperDecl14HomeObject n = i < next.size() ? next.get(i) : null;
+			
+			//get parts for previous & next 
+			List<XmlMapperDecl14HomePart> pParts = p == null ? new ArrayList<>() : p.gethPart().getHomeparts();
+			List<XmlMapperDecl14HomePart> nParts = n == null ? new ArrayList<>() : n.gethPart().getHomeparts();
+			
+			//get the bigger parts
+			int rows = pParts.size() > nParts.size() ? pParts.size():nParts.size();
+			int emptyCellsCnt = 4;  //broi praxni kletki 
+			
+			//map with owners grouped by IDN
+			Map<String, List<XmlMapperDecl14Owner>> ownersByIdn =  XmlMapperDecl14Manager.getSubjectsEinSeqnoMap(XmlMapperDecl14Manager.getOwners(d14));
+			
+			//the header for each home object.... N homebobject kind function.... etc
+			HtmlElementPropBuilder br = new HtmlElementPropBuilder();
+			br.style = "font-weight:bold; font-size:13px; ";
+			res.append(HTML_KEYWORDS.TR.begin(br.build()));
+			res.append(pParts == null ? getNEmptyCells(emptyCellsCnt): asCell("N "+p.getSeqNoObj()) + getNEmptyCells(1)+ asCell(p.getFunctionho() + " " + p.getKindHomeObj()) + getNEmptyCells(1));
+			res.append(nParts == null ? getNEmptyCells(emptyCellsCnt): asCell("N "+n.getSeqNoObj()) + getNEmptyCells(1) +asCell(n.getFunctionho() + " " + n.getKindHomeObj()) + getNEmptyCells(1));
+			res.append(HTML_KEYWORDS.TR.end());
+			
+			//create row for part
+			for(int j=0; j < rows; j++) {
+				res.append(HTML_KEYWORDS.TR.begin());
+				//create cells for each row
+				
+				//previous state
+				if(j < pParts.size()) {
+					XmlMapperDecl14HomePart pp =  pParts.get(j);
+					XmlMapperTaxSubject ts = pp.getSubject();
+					res.append(asCell(ownersByIdn.get(ts.getIdn()).get(0).getSeqNo()));
+					res.append(asCell(ts.getIdn()));
+					res.append(asCell(ts.getSubjectName()));
+					res.append(asCell(getPartToShow(pp)));
+				}else {
+					//empty cells
+					res.append(getNEmptyCells(emptyCellsCnt));
+				}
+				
+				//next object state
+				if(j < nParts.size()) {
+					XmlMapperDecl14HomePart pn =  nParts.get(j);
+					XmlMapperTaxSubject ts = pn.getSubject();
+					res.append(asCell(ownersByIdn.get(ts.getIdn()).get(0).getSeqNo()));
+					res.append(asCell(ts.getIdn()));
+					res.append(asCell(ts.getSubjectName()));
+					res.append(asCell(getPartToShow(pn)));
+				}else {
+					//empty cells
+					res.append(getNEmptyCells(emptyCellsCnt));
+				}
+				res.append(HTML_KEYWORDS.TR.end());
+			}
+		}
+		res.append(HTML_KEYWORDS.TABLE.end());
+		return res.toString();
+	}
+	
+	
+	/***
+	 * Just a couple of empty td cells!!!
+	 * @param n
+	 * @return
+	 */
+	private static String getNEmptyCells(int n) {
+		String s = "";
+		for(int i=0; i < n; i++) {
+			s+="<td></td>";
+		}
+		return s;
+	}
+	
 	/**
-	 * Create Html table for building!!
+	 * Create Html table for building!!!!
 	 * @param bb
 	 * @param d14
 	 * @return
@@ -269,7 +376,7 @@ class HtmlOutPut {
 	}
 	
 	/***
-	 * Current history & the delta with previuos history!!!
+	 * Current history XmlMapperDecl14 & XmlDelta  delta with previuos history!!! index is index of history...
 	 * @param d14
 	 * @param delta
 	 * @param index
@@ -287,7 +394,7 @@ class HtmlOutPut {
 		
 		b.setStyle("");
 		
-		//if delta is null print only delta................... & return immediately
+		//if delta is null print only d14................... & return immediately
 		if(delta!=null) {
 			//print delta to html output
 			res.append(asHtmlTable(delta, d14));
@@ -297,11 +404,12 @@ class HtmlOutPut {
 				res.append(d14.getAdditionalNote());
 				res.append(HTML_KEYWORDS.H1.end());
 			}
+			//return here if we want to print only differences , otherwise comment return statement to print all
 			return res.toString() ;
 		}
 		
 		XmlMapperDecl14Property property =   d14.getProperty();
-		XmlMapperDecl14EdiFice edifice =  property.getEdifice();
+		XmlMapperDecl14EdiFice edifice =  property.getEdifice();  //kakvtoto i da e
 		//XmlMapperDecl14PartProperty partProperty =  property.getPartProperty();
 		
 		
@@ -334,11 +442,15 @@ class HtmlOutPut {
 		return res.toString();
 	}
 	
-	
+	/***
+	 * Table with the owners - tablitsa sys sobstvenicite...... pri parvata obrabotka
+	 * @param b
+	 * @param owners
+	 * @return
+	 */
 	private static String asHtmlTableOwners(HtmlElementPropBuilder b, List<XmlMapperDecl14Owner> owners) {
 		//HtmlElementPropBuilder b = new HtmlElementPropBuilder();
-		//b.setClazz("myclass"); b.setStyle("mystyle");
-		
+		//b.setClazz("myclass"); b.setStyle("color:red;");
 		StringBuilder res = new StringBuilder();
 		res.append(HTML_KEYWORDS.TABLE.begin(b.build()));
 		res.append(HTML_KEYWORDS.TR.begin());
@@ -359,24 +471,44 @@ class HtmlOutPut {
 		return res.toString();
 	}
 	
-	//parts to html table
-	private static String asHtmlTable(List<XmlMapperDecl14HomePart> parts, Map<String, List<XmlMapperDecl14Owner>> ownersByIdn) {
+	//parts to html table ! Tablicata sys chastite!!!!
+	/*private static String asHtmlTable1(List<XmlMapperDecl14HomePart> parts, Map<String, List<XmlMapperDecl14Owner>> ownersByIdn) {
+		HtmlElementPropBuilder b = new HtmlElementPropBuilder();
+		b.setClazz("myclass"); b.setStyle("color:blue; border-style: solid;");
 		
 		StringBuilder res = new StringBuilder();
-		res.append(HTML_KEYWORDS.TABLE.begin());
+		res.append(HTML_KEYWORDS.TABLE.begin(b.build()));
 
 		//rows for parts
 		for(XmlMapperDecl14HomePart p:parts) {
 			res.append(HTML_KEYWORDS.TR.begin());
 			XmlMapperTaxSubject ts =  p.getSubject();
-			res.append(asCell(ownersByIdn.get(p.getSubject().getIdn()).get(0).getSeqNots()));
+			res.append(asCell(ownersByIdn.get(ts.getIdn()).get(0).getSeqNots()));
 			res.append(asCell(ts.getIdn()));
 			res.append(asCell(ts.getSubjectName()));
-			res.append(asCell(getPartToShow(p)));
+			res.append(asCell(getPartToShow(p)));  
 			res.append(HTML_KEYWORDS.TR.end());
 		}
 		res.append(HTML_KEYWORDS.TABLE.end());
 		return res.toString();
-	}
+	}*/
+	
+	
+	/*private static String asDiv(HtmlElementPropBuilder p, Object o) {
+		if(o == null) o = "";
+		StringBuilder res = new StringBuilder();
+	    if(p!=null) res.append(HTML_KEYWORDS.DIV.begin(p.build()));
+	    else res.append(HTML_KEYWORDS.DIV.begin());
+		res.append(o.toString());
+		res.append(HTML_KEYWORDS.DIV.end());
+		return res.toString();
+	}*/
+
+
+	/*private static String asDiv(Object o) {
+		return asDiv(null, o);
+	}*/
+
+
 
 }

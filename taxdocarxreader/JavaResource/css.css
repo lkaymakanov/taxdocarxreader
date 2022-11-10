@@ -1,0 +1,92 @@
+body {
+	/*background-color:rgb(40, 60, 0);*/
+	/*background-image: url('blood.png');
+	background-repeat: no-repeat;
+    background-position: top right;*/
+}
+
+h1{
+	color:white;
+}
+
+h5 {
+	font-size:12px; margin:0px; color:gold;
+}
+
+span.expandbuttontitle {
+	font-size:12px; margin:0px; color:gold;
+	position:relative;
+	top:-5px;
+}
+
+input.search{
+	border:solid 4px blue;
+	border-radius:3px;
+	padding:3px;
+	font-size:23px;
+	background-image: url('search.png');
+	background-position: right;
+	height:48px;
+	width:250px;
+	background-repeat: no-repeat;
+}
+
+a.wlink{
+	text-decoration:none; 
+	color:white;
+}
+
+table.register{
+	border-collapse: collapse;
+}
+
+table.register tr td {
+   color:white;
+   border: solid 1px;
+}
+
+table.register tr td  a{
+   color:white;
+}
+
+table.register  tr.header  td {
+	font-size:22px;
+	color:gold;
+	background-color:black;
+	padding:8px;
+	border: solid 1px white;
+}
+table.register  tr.header  td  a{
+	text-decoration:underline;
+	color:gold;
+}
+
+table.register tr.odd{
+ background-color:grey;
+}
+
+table.register tr:hover {
+ background-color:green;
+ color:red;
+}
+
+ul.tableref  li a:hover{
+  color:gold;
+}
+
+ul.navigation{
+   font-size:12px; margin-left:10px; padding:0px; 
+   list-style-type: none;
+}
+
+ul{
+	font-size:12px; margin:0px; padding:0px;
+}
+
+ul.menu{
+	padding-left:25px;
+}
+
+.highlight{
+	background-color:#ca1434;
+}

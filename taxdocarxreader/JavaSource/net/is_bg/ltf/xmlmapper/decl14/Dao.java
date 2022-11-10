@@ -2,6 +2,7 @@ package net.is_bg.ltf.xmlmapper.decl14;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import net.is_bg.ltf.db.common.AbstractMainDao;
 import net.is_bg.ltf.db.common.interfaces.IConnectionFactory;
@@ -34,5 +35,10 @@ class Dao extends AbstractMainDao {
 		return s;
 	}
 	
-
+	public Set<Long> getDecl14_2TaxdocIds(){
+		SelectTdids14_2 sel = new SelectTdids14_2();
+		execute(sel);
+		return sel.ids;
+	}
+	
 }

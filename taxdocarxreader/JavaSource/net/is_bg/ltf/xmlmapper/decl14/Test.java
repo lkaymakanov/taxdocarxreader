@@ -1,8 +1,10 @@
 package net.is_bg.ltf.xmlmapper.decl14;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -77,7 +79,8 @@ class Test {
 			
 			new ConnectionProperties(PGR_DRIVER, URL_SOFIA_MERGE3, "sofiamerge3", "12345", "sofiamerge3"),  //10
 			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://192.168.50.33:5432/pdv_test", "pdv", "pdv", ""),  //11
-			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://10.240.44.244:5433/burgas", "prod", "12345", "")  //12
+			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://10.240.44.244:5433/burgas", "prod", "12345", ""),  //12\
+			new ConnectionProperties(PGR_DRIVER,"jdbc:postgresql://172.22.4.68:5432/sofiamerge3", "sofia2013", "12345", "")  //13 sofia real
 	};
 	
 	public static class CF extends  DataSourceConnectionFactoryDrManager implements IConnectionFactoryX {
@@ -127,7 +130,7 @@ class Test {
 		//compare histories one another.
 		ss = XmlMapperDecl14Manager.cmpHistories(decl14);
 		
-		String partidaNo = decl14.get(0).getPartidano();
+		String partidaNo = decl14.size() == 0 ? "No_partida_for_taxdoc_id" + taxdocId :  decl14.get(0).getPartidano();
 		System.out.println(partidaNo);
 		//System.out.println("partidano " + decl14.get(0).getPartidano());
 		
@@ -139,15 +142,36 @@ class Test {
 	}
 	
 	
+	/***
+	 * Vsi4ki deklaracii po chlen 50
+	 * @throws FileNotFoundException
+	 */
+	private static void extractAllDeclarations50() throws FileNotFoundException {
+		Dao dao  = new  Dao(DBConfig.getConnectionFactory());
+		for(long tdId : dao.getDecl14_2TaxdocIds()) {
+			try {
+				saveToFile(tdId);
+			}catch (Exception e) {
+				PrintStream ps = new PrintStream(new File("excetptionForTd_" +tdId  +".html"));
+				e.printStackTrace(ps);
+				ps.close();
+			}
+		}
+	}
+	
 	public static void main(String [] args) throws ClassNotFoundException, JAXBException, UnsupportedEncodingException, IOException{
-		init(dBases[12]);
+		init(dBases[13]);
+		
+		saveToFile(6456411);
 		
 		//761270
 		//761272
 		//760231
 		//774685
 		//756458
-		saveToFile(774685);
+		//saveToFile(6648031);
+		//extractAllDeclarations50();
+		//saveToFile(6456411);
 		/*
 		saveToFile(761270);
 		saveToFile(761272);
@@ -160,3 +184,4 @@ class Test {
 		System.out.println("End....");
 	}
 }
+;
