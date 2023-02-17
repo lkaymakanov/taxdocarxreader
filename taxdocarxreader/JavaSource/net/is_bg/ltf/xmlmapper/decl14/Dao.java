@@ -7,7 +7,7 @@ import java.util.Set;
 import net.is_bg.ltf.db.common.AbstractMainDao;
 import net.is_bg.ltf.db.common.interfaces.IConnectionFactory;
 
-class Dao extends AbstractMainDao {
+public class Dao extends AbstractMainDao {
 
 	/**
 	 * 
@@ -18,15 +18,15 @@ class Dao extends AbstractMainDao {
 		super(connectionFactory);
 	}
 	
-	public List<byte[]> getXmlDocData(long taxdocId){
-		SelectDocData sel = new SelectDocData(taxdocId);
+	public List<byte[]> getXmlDocData(long taxdocId, long taxdocArxId){
+		SelectDocData sel = new SelectDocData(taxdocId, taxdocArxId);
 		execute(sel);
 		return sel.getXml();
 	}
 	
 	
-	public List<String> getXmlDocDataStr(long taxdocId){
-		SelectDocData sel = new SelectDocData(taxdocId);
+	public List<String> getXmlDocDataStr(long taxdocId, long taxdocArxId){
+		SelectDocData sel = new SelectDocData(taxdocId, taxdocArxId);
 		execute(sel);
 		List<String> s = new ArrayList<String>(); 
 		for(byte [] b :sel.getXml()) {

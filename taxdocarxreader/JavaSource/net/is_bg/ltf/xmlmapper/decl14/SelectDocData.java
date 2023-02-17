@@ -10,16 +10,19 @@ import net.is_bg.ltf.db.common.SelectSqlStatement;
 
 class SelectDocData extends SelectSqlStatement{
 	
-	private long taxdocId =-1;
+	private long taxdocId, taxdocArxId =-1;
 	private List<byte[]> xml = new ArrayList<byte[]>();
 	
-	SelectDocData(long taxdocId ){
+	SelectDocData(long taxdocId, long taxdocArxId ){
 		this.taxdocId = taxdocId;
+		this.taxdocArxId = taxdocArxId;
 	}
 
 	@Override
 	protected String getSqlString() {
-		return " select docdata from taxdocarx where taxdoc_id = ? order by taxdocarx_id ";
+		String sql= " select docdata from taxdocarx where taxdoc_id = ? ";
+		if(taxdocArxId > 0) sql+=" and taxdocarx_id =  " + taxdocArxId;
+		return sql+ "  order by taxdocarx_id ";
 	}
 	
 	@Override

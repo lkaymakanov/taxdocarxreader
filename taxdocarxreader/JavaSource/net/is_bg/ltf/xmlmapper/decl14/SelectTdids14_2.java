@@ -20,7 +20,6 @@ class SelectTdids14_2 extends SelectSqlStatement {
 				"join taxdoc td on td.taxdoc_id = ar.taxdoc_id\r\n" + 
 				"where ar.doc_date = current_date\r\n" + 
 				"and td.documenttype_id = 50";
-				
 		 return s;
 				
 	}
